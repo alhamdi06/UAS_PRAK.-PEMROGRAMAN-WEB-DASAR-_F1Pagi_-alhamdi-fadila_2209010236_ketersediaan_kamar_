@@ -1,7 +1,5 @@
 <?php
 
-// app/Http/Controllers/RoomController.php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -20,8 +18,15 @@ class RoomController extends Controller
 
     public function storeCheckIn(Request $request)
     {
-        $room = Room::where('room_number', $request->room_number)->first();
-        if ($room && $room->is_available) {
+        $request->validate([
+            'room_number' => 'required',
+            'name' => 'required',
+            'check_in_date' => 'required|date',
+        ]);
+
+        $room = Room::where('room_number', $request->room_number)->where('is_available', true)->first();
+
+        if ($room) {
             Booking::create([
                 'room_id' => $room->id,
                 'patient_name' => $request->name,
@@ -37,8 +42,15 @@ class RoomController extends Controller
 
     public function storeCheckOut(Request $request)
     {
-        $booking = Booking::where('room_id', Room::where('room_number', $request->room_number)->first()->id)
-                           ->whereNull('check_out_date')->first();
+        $request->validate([
+            'room_number' => 'required',
+            'check_out_date' => 'required|date',
+        ]);
+
+        $booking = Booking::whereHas('room', function ($query) use ($request) {
+            $query->where('room_number', $request->room_number);
+        })->whereNull('check_out_date')->first();
+
         if ($booking) {
             $booking->update(['check_out_date' => $request->check_out_date]);
             $booking->room->update(['is_available' => true]);

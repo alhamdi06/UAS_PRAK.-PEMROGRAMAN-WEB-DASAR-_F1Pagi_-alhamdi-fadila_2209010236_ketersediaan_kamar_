@@ -1,5 +1,20 @@
 /* Reset some basic elements to remove default styles */
-body, h1, h2, h3, h4, h5, h6, p, div, span, img, ul, li, a, input, button {
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+div,
+span,
+img,
+ul,
+li,
+a,
+input,
+button {
     margin: 0;
     padding: 0;
     border: 0;
@@ -11,12 +26,12 @@ body, h1, h2, h3, h4, h5, h6, p, div, span, img, ul, li, a, input, button {
 
 /* Set some basic styles */
 body {
-    font-family: 'Arial', sans-serif;
+    font-family: "Arial", sans-serif;
     line-height: 1.6;
-    background-color: #52a108;
+    background-color: #8b2828;
     color: #190dc4;
     padding: 20px;
-    background-image: url('https://ibb.co.com/JyQkQrD'); /* Replace with your image path */
+    background-image: url("https://ibb.co.com/JyQkQrD"); /* Replace with your image path */
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
@@ -51,7 +66,9 @@ form {
     margin-top: 20px;
 }
 
-form input[type="text"], form input[type="date"], form button {
+form input[type="text"],
+form input[type="date"],
+form button {
     width: 100%;
     padding: 10px;
     margin: 5px 0 10px;
@@ -60,7 +77,7 @@ form input[type="text"], form input[type="date"], form button {
 }
 
 form button {
-    background-color: #007BFF;
+    background-color: #007bff;
     color: #cf4c4c;
     border: none;
     cursor: pointer;
@@ -79,7 +96,8 @@ table {
     font-size: 1rem;
 }
 
-table th, table td {
+table th,
+table td {
     padding: 10px;
     border: 1px solid #d12222;
     text-align: left;

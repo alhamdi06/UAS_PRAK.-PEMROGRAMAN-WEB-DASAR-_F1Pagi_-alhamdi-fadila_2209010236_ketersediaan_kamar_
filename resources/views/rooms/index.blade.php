@@ -65,7 +65,7 @@
             <tbody>
                 @foreach($bookings as $booking)
                     <tr class="booked-room">
-                        <td>{{ $booking->patient->name }}</td>
+                        <td>{{ $booking->patient_name }}</td>
                         <td>{{ $booking->room->room_number }}</td>
                         <td>{{ $booking->room->level }}</td>
                         <td>{{ $booking->check_in_date }}</td>
@@ -101,12 +101,8 @@
         <form action="{{ route('rooms.storeCheckOut') }}" method="POST">
             @csrf
             <div class="form-group">
-                <label for="name">Patient Name</label>
-                <input type="text" class="form-control" id="name" name="name" required>
-            </div>
-            <div class="form-group">
-                <label for="room_number">Room Number</label>
-                <input type="text" class="form-control" id="room_number" name="room_number" required>
+                <label for="room_number_checkout">Room Number</label>
+                <input type="text" class="form-control" id="room_number_checkout" name="room_number" required>
             </div>
             <div class="form-group">
                 <label for="check_out_date">Check-Out Date</label>
