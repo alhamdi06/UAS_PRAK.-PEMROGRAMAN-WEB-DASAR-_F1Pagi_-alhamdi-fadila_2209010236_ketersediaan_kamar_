@@ -1,101 +1,51 @@
 <?php
 
+// app/Http/Controllers/RoomController.php
+
 namespace App\Http\Controllers;
 
-use App\Models\RoomLevel;
-use App\Models\Room;
-use App\Models\Patient;
-use App\Models\Booking;
 use Illuminate\Http\Request;
+use App\Models\Room;
+use App\Models\Booking;
 
 class RoomController extends Controller
 {
     public function index()
     {
-        $availableRooms = Room::where('is_available', true)->with('roomLevel')->get();
-        $bookedRooms = Room::whereHas('bookings')->with('roomLevel')->get();
-        $bookings = Booking::with('patient', 'room.roomLevel')->get();
+        $availableRooms = Room::where('is_available', true)->get();
+        $bookings = Booking::with('room')->get();
 
-        return view('rooms.index', compact('availableRooms', 'bookedRooms', 'bookings'));
+        return view('rooms.index', compact('availableRooms', 'bookings'));
     }
 
     public function storeCheckIn(Request $request)
     {
-        // Validasi data
-        $request->validate([
-            'name' => 'required|string',
-            'room_number' => 'required|string',
-            'check_in_date' => 'required|date'
-        ]);
-
-        // Simpan data pasien
-        $patient = Patient::create([
-            'name' => $request->name,
-        ]);
-
-        // Cari data kamar berdasarkan nomor kamar
         $room = Room::where('room_number', $request->room_number)->first();
-
-        // Jika kamar ditemukan dan tersedia, lakukan proses check-in
         if ($room && $room->is_available) {
-            // Set kamar menjadi tidak tersedia
-            $room->is_available = false;
-            $room->save();
-
-            // Simpan data booking
             Booking::create([
-                'patient_id' => $patient->id,
                 'room_id' => $room->id,
+                'patient_name' => $request->name,
                 'check_in_date' => $request->check_in_date,
             ]);
+            $room->update(['is_available' => false]);
 
-            // Redirect dengan pesan sukses
-            return redirect()->route('rooms.index')->with('success', 'Check-in successfully recorded.');
-        } else {
-            // Redirect dengan pesan error jika kamar tidak ditemukan atau tidak tersedia
-            return redirect()->route('rooms.index')->with('error', 'Room is not available.');
+            return redirect()->back()->with('success', 'Check-in successful.');
         }
+
+        return redirect()->back()->with('error', 'Room is not available.');
     }
 
     public function storeCheckOut(Request $request)
     {
-        // Validasi data
-        $request->validate([
-            'name' => 'required|string',
-            'room_number' => 'required|string',
-            'check_out_date' => 'required|date'
-        ]);
+        $booking = Booking::where('room_id', Room::where('room_number', $request->room_number)->first()->id)
+                           ->whereNull('check_out_date')->first();
+        if ($booking) {
+            $booking->update(['check_out_date' => $request->check_out_date]);
+            $booking->room->update(['is_available' => true]);
 
-        // Cari data kamar berdasarkan nomor kamar
-        $room = Room::where('room_number', $request->room_number)->first();
-
-        // Jika kamar ditemukan dan sedang dibooking, lakukan proses check-out
-        if ($room) {
-            $booking = Booking::where('room_id', $room->id)
-                ->whereHas('patient', function ($query) use ($request) {
-                    $query->where('name', $request->name);
-                })
-                ->whereNull('check_out_date')
-                ->first();
-
-            if ($booking) {
-                // Update tanggal check-out pada booking
-                $booking->check_out_date = $request->check_out_date;
-                $booking->save();
-
-                // Set kamar menjadi tersedia
-                $room->is_available = true;
-                $room->save();
-
-                // Redirect dengan pesan sukses
-                return redirect()->route('rooms.index')->with('success', 'Check-out successfully recorded.');
-            } else {
-                // Redirect dengan pesan error jika booking tidak ditemukan
-                return redirect()->route('rooms.index')->with('error', 'No active booking found for this room and patient.');
-            }
-        } else {
-            // Redirect dengan pesan error jika kamar tidak ditemukan
-            return redirect()->route('rooms.index')->with('error', 'Room not found.');
+            return redirect()->back()->with('success', 'Check-out successful.');
         }
+
+        return redirect()->back()->with('error', 'Booking not found.');
     }
 }

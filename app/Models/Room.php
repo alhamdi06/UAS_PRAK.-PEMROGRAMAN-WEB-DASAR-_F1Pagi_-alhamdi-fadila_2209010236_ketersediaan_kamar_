@@ -8,12 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Room extends Model
 {
     use HasFactory;
-    protected $fillable = ['room_number', 'room_level_id','is_available'];
 
-    public function roomLevel()
-    {
-        return $this->belongsTo(RoomLevel::class);
-    }
+    protected $fillable = ['room_number', 'level', 'is_available'];
 
     public function bookings()
     {

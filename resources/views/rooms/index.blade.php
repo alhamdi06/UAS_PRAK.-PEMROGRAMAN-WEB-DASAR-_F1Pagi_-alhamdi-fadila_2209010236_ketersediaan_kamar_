@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Room Bookings</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
     <style>
         .available-room {
             background-color: #e0ffff; 
@@ -43,7 +44,7 @@
                 @foreach($availableRooms as $room)
                     <tr class="available-room">
                         <td>{{ $room->room_number }}</td>
-                        <td>{{ $room->roomLevel->name }}</td>
+                        <td>{{ $room->level }}</td>
                         <td>{{ $room->is_available ? 'Yes' : 'No' }}</td>
                     </tr>
                 @endforeach
@@ -66,7 +67,7 @@
                     <tr class="booked-room">
                         <td>{{ $booking->patient->name }}</td>
                         <td>{{ $booking->room->room_number }}</td>
-                        <td>{{ $booking->room->roomLevel->name }}</td>
+                        <td>{{ $booking->room->level }}</td>
                         <td>{{ $booking->check_in_date }}</td>
                         <td>{{ $booking->check_out_date ?? 'N/A' }}</td>
                     </tr>

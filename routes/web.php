@@ -14,3 +14,10 @@ Route::get('/bookings/create', [BookingController::class, 'create'])->name('book
 Route::post('/bookings', [BookingController::class, 'store'])->name('bookings.store');
 Route::patch('/bookings/{booking}/checkout', [BookingController::class, 'checkOut'])->name('bookings.checkout');
 Route::get('rooms/{room}/check-in', 'RoomController@checkIn')->name('rooms.check-in');
+// routes/web.php
+
+
+Route::get('/rooms', [RoomController::class, 'index'])->name('rooms.index');
+Route::post('/rooms/check-in', [RoomController::class, 'storeCheckIn'])->name('rooms.storeCheckIn');
+Route::post('/rooms/check-out', [RoomController::class, 'storeCheckOut'])->name('rooms.storeCheckOut');
+
