@@ -28,7 +28,7 @@ button {
 body {
     font-family: "Arial", sans-serif;
     line-height: 1.6;
-    background-color: #8b2828;
+    background-color: #000000;
     color: #190dc4;
     padding: 20px;
     background-image: url("https://ibb.co.com/JyQkQrD"); /* Replace with your image path */
@@ -41,8 +41,8 @@ body {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
-    background: #0dd14e;
-    box-shadow: 0 0 10px rgba(255, 0, 0, 0.1);
+    background: #00e458;
+    box-shadow: 0 0 10px rgba(255, 2, 2, 0.589);
     border-radius: 8px;
 }
 
@@ -51,7 +51,7 @@ header {
     margin-bottom: 20px;
     text-align: center;
     padding: 20px 0;
-    background-color: #005dc0;
+    background-color: #49063d;
     color: #13c457;
     border-radius: 8px 8px 0 0;
 }
